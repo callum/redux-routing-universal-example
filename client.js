@@ -1,16 +1,14 @@
 import React from 'react'
 import { Provider } from 'react-redux'
 import { History, navigate } from 'redux-routing'
+
+import configureStore from './lib/configureStore'
 import Root from './lib/Root'
 
-import configureRouter from './lib/configureRouter'
-import configureStore from './lib/configureStore'
+const store = configureStore(window._state, History)
 
-const router = configureRouter(History)
-const store = configureStore(router)
-
-store.dispatch(navigate(window._state.location))
+store.dispatch(navigate(window._state.href))
 
 React.render(<Provider store={store}>
-  {() => <Root router={router} />}
+  {() => <Root />}
 </Provider>, document.getElementById('root'))

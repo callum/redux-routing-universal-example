@@ -6,7 +6,6 @@ import React from 'react'
 import { Provider } from 'react-redux'
 import { navigate } from 'redux-routing'
 
-import configureRouter from './lib/configureRouter'
 import configureStore from './lib/configureStore'
 import Root from './lib/Root'
 
@@ -15,19 +14,18 @@ const server = http.createServer((req, res) => {
     const location = url.parse(req.url)
 
     if (location.pathname === '/bundle.js') {
-      res.setHeader('content-type', 'application/javascript');
-      fs.createReadStream(__dirname + '/public/bundle.js').pipe(res);
+      res.setHeader('content-type', 'application/javascript')
+      fs.createReadStream(__dirname + '/public/bundle.js').pipe(res)
       return
     }
 
-    const router = configureRouter()
-    const store = configureStore(router)
-
+    const store = configureStore()
     store.dispatch(navigate(location))
+
     const state = JSON.stringify(store.getState())
 
     const html = React.renderToString(<Provider store={store}>
-      {() => <Root router={router} />}
+      {() => <Root />}
     </Provider>)
 
     const doc = `<!doctype html>
